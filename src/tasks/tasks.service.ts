@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TasksRepository } from './tasks.repository';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { TaskStatus } from './task-status.enum';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksService {
@@ -12,6 +14,10 @@ export class TasksService {
   ) {}
 
   //   private tasks: Task[] = [];
+
+  getAllTasks(): Promise<Task[]> {
+    return this.tasksRepository.getAllTasks();
+  }
   //   getAllTasks(): Task[] {
   //     return this.tasks;
   //   }
@@ -52,6 +58,9 @@ export class TasksService {
   //     const found = this.getTaskById(id);
   //     this.tasks = this.tasks.filter((task) => task.id !== found.id);
   //   }
+  updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+    return this.tasksRepository.updateTaskStatus(id, status);
+  }
   //   updateTaskStatus(id: string, status: TaskStatus): Task | undefined {
   //     const task = this.getTaskById(id);
   //     if (task) {
@@ -59,6 +68,15 @@ export class TasksService {
   //     }
   //     return task;
   //   }
+
+  getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    return this.tasksRepository.getTasks(filterDto);
+  }
+
+  // getTasksWithFilters(filterDto: any): Promise<Task[]> {
+  //   return this.tasksRepository.getTaskWithFilters(filterDto);
+  // }
+
   //   getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
   //     const { status, search } = filterDto;
   //     let tasks = this.getAllTasks();

@@ -3,6 +3,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksRepository extends Repository<Task> {
@@ -37,4 +38,57 @@ export class TasksRepository extends Repository<Task> {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
   }
+
+  getAllTasks(): Promise<Task[]> {
+    return this.find();
+  }
+
+  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+    const task = await this.getTaskById(id);
+    task.status = status;
+    await this.save(task);
+    return task;
+  }
+
+  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    const { status, search } = filterDto;
+
+    const query = this.createQueryBuilder('task');
+
+    if (status) {
+      query.andWhere('task.status = :status', { status });
+    }
+
+    if (search) {
+      query.andWhere(
+        '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))',
+        { search: `%${search}%` },
+      );
+    }
+
+    const tasks = await query.getMany();
+    return tasks;
+  }
+
+  // getTaskWithFilters(filterDto: any): Promise<Task[]> {
+  //   const { status, search } = filterDto;
+
+  //   let tasks = this.getAllTasks();
+
+  //   if (status) {
+  //     tasks = tasks.filter((task) => task.status === status);
+  //   }
+  //   if (search) {
+  //     tasks = tasks.filter((task) => {
+  //       if (
+  //         task.title.toLowerCase().includes(search) ||
+  //         task.description.toLowerCase().includes(search)
+  //       ) {
+  //         return true;
+  //       }
+  //       return false;
+  //     });
+  //   }
+  //   return tasks;
+  // }
 }
