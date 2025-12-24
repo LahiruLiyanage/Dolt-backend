@@ -7,7 +7,7 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksRepository extends Repository<Task> {
-  constructor(private dataSource: DataSource) {
+  constructor(dataSource: DataSource) {
     super(Task, dataSource.createEntityManager());
   }
 
@@ -69,26 +69,4 @@ export class TasksRepository extends Repository<Task> {
     const tasks = await query.getMany();
     return tasks;
   }
-
-  // getTaskWithFilters(filterDto: any): Promise<Task[]> {
-  //   const { status, search } = filterDto;
-
-  //   let tasks = this.getAllTasks();
-
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //   }
-  //   if (search) {
-  //     tasks = tasks.filter((task) => {
-  //       if (
-  //         task.title.toLowerCase().includes(search) ||
-  //         task.description.toLowerCase().includes(search)
-  //       ) {
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-  //   }
-  //   return tasks;
-  // }
 }

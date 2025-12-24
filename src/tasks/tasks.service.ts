@@ -10,90 +10,29 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 export class TasksService {
   constructor(
     @InjectRepository(TasksRepository)
-    private tasksRepository: TasksRepository,
+    private readonly tasksRepository: TasksRepository,
   ) {}
-
-  //   private tasks: Task[] = [];
 
   getAllTasks(): Promise<Task[]> {
     return this.tasksRepository.getAllTasks();
   }
-  //   getAllTasks(): Task[] {
-  //     return this.tasks;
-  //   }
 
   getTaskById(id: string): Promise<Task> {
     return this.tasksRepository.getTaskById(id);
   }
 
-  //   getTaskById(id: string): Task {
-  //     const found = this.tasks.find((task) => task.id === id);
-  //     if (!found) {
-  //       throw new NotFoundException(`Task with ID "${id}" not found`);
-  //     }
-  //     return found;
-  //   }
-
   createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     return this.tasksRepository.createTask(createTaskDto);
   }
 
-  //   createTask(createTaskDto: CreateTaskDto): Task[] {
-  //     const { title, description } = createTaskDto;
-  //     const task: Task = {
-  //       id: uuid(),
-  //       title: title,
-  //       description: description,
-  //       status: TaskStatus.PENDING,
-  //     };
-  //     this.tasks.push(task);
-  //     return this.tasks;
-  //   }
-
   deleteTask(id: string): Promise<void> {
     return this.tasksRepository.deleteTask(id);
   }
-
-  //   deleteTask(id: string): void {
-  //     const found = this.getTaskById(id);
-  //     this.tasks = this.tasks.filter((task) => task.id !== found.id);
-  //   }
   updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
     return this.tasksRepository.updateTaskStatus(id, status);
   }
-  //   updateTaskStatus(id: string, status: TaskStatus): Task | undefined {
-  //     const task = this.getTaskById(id);
-  //     if (task) {
-  //       task.status = status;
-  //     }
-  //     return task;
-  //   }
 
   getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
     return this.tasksRepository.getTasks(filterDto);
   }
-
-  // getTasksWithFilters(filterDto: any): Promise<Task[]> {
-  //   return this.tasksRepository.getTaskWithFilters(filterDto);
-  // }
-
-  //   getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
-  //     const { status, search } = filterDto;
-  //     let tasks = this.getAllTasks();
-  //     if (status) {
-  //       tasks = tasks.filter((task) => task.status === status);
-  //     }
-  //     if (search) {
-  //       tasks = tasks.filter((task) => {
-  //         if (
-  //           task.title.toLowerCase().includes(search) ||
-  //           task.description.toLowerCase().includes(search)
-  //         ) {
-  //           return true;
-  //         }
-  //         return false;
-  //       });
-  //     }
-  //     return tasks;
-  //   }
 }
